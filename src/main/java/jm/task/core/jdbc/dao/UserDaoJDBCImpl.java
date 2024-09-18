@@ -29,18 +29,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-       /* try (var statement = connect.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS users(id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), lastname VARCHAR(50), age TINYINT);");
-        } catch (SQLException ex) {
-            System.out.println("Не удалось создать statement - Message - " +  ex.getMessage());
-        }*/
-
         String sql = "CREATE TABLE IF NOT EXISTS users(" +
                 "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
-                "name VARCHAR(50), lastname VARCHAR(50), " +
+                "name VARCHAR(25), lastname VARCHAR(25), " +
                 "age TINYINT);";
 
-        try (PreparedStatement statement = connect.prepareStatement(sql)) {
+        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
             statement.executeUpdate();
         } catch (SQLException ex){
             System.out.println("Не удалось создать statement - Message - " +  ex.getMessage());
