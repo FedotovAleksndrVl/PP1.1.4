@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws SQLException {
         final UserService userService = new UserServiceImpl();
-        ArrayList<User> user = new ArrayList<>();
+        final ArrayList<User> user = new ArrayList<>();
         user.add(new User("Александр", "Александров", (byte) 25));
         user.add(new User("Инесса", "Инессова", (byte) 25));
         user.add(new User("Олег", "Олегархов", (byte) 27));
