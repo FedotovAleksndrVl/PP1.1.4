@@ -89,15 +89,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-
         String sql = "TRUNCATE TABLE USERS";
+
         try (Statement statement = Util.getConnect().createStatement()) {
-            ResultSet results = statement.executeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'db' AND TABLE_NAME = 'users'");
-            if (results.next()) {
-                statement.executeUpdate(sql);
-            }
+            statement.executeUpdate(sql);
         } catch (SQLException ex){
             System.out.println("Не удалось очистить таблицу - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

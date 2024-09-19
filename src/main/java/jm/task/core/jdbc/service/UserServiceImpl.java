@@ -15,13 +15,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String toString() {
-        return "UserServiceImpl{" +
-                "instanceDAO=" + instanceDao +
-                '}';
-    }
-
-    @Override
     public void dropUsersTable() {
         instanceDao.dropUsersTable();
     }

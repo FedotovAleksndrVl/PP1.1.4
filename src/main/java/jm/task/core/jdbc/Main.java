@@ -9,28 +9,28 @@ import jm.task.core.jdbc.util.Util;
 
 import java.sql.Driver;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        /*Class<Driver> driverClass = Driver.class;
-        try (var connection = Util.getConnect()){
-            System.out.println(connection.getTransactionIsolation());
-        }*/
-        //UserDao dao = new UserDaoJDBCImpl();
-        //dao.createUsersTable();
-        //dao.cleanUsersTable();
-        /*
-        dao.saveUser("Автор", "Автор", (byte) 24);
-        dao.removeUserById(6);
-        for (User el : dao.getAllUsers()) {
-            System.out.print(el.getName() + " " + el.getAge() + "\n");
-        }
-        dao.dropUsersTable();
-        dao.cleanUsersTable();
-        //System.out.println(UserDaoJDBCImpl.connect.getTransactionIsolation());
-*/
-        //UserDao userService = new UserDaoJDBCImpl();
         final UserService userService = new UserServiceImpl();
+        ArrayList<User> user = new ArrayList<>();
+        user.add(new User("Александр", "Александров", (byte) 25));
+        user.add(new User("Инесса", "Инессова", (byte) 25));
+        user.add(new User("Олег", "Олегархов", (byte) 27));
+        user.add(new User("Юлия", "Юлова", (byte) 27));
 
+        userService.createUsersTable();
+
+        for (User el : user) {
+            userService.saveUser(el.getName(), el.getLastName(), el.getAge());
+            System.out.printf("User с именем — %s добавлен в базу данны \n", el.getName());
+        }
+
+        System.out.println(userService.getAllUsers());
+
+        userService.cleanUsersTable();
+
+        userService.dropUsersTable();
     }
 }
