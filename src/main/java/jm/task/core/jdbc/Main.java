@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         final UserService userService = new UserServiceImpl();
         final ArrayList<User> user = new ArrayList<>();
         user.add(new User("Александр", "Александров", (byte) 25));

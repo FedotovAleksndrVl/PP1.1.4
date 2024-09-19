@@ -17,8 +17,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         final String sql = "CREATE TABLE IF NOT EXISTS USERS(" +
                 "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
-                "names VARCHAR(25), lastnames VARCHAR(25), " +
-                "ages TINYINT)";
+                "name VARCHAR(25), lastname VARCHAR(25), " +
+                "age TINYINT)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
@@ -40,7 +40,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastname, byte age) {
-        final String sql = "INSERT INTO USERS(names, lastnames, ages) " +
+        final String sql = "INSERT INTO USERS(name, lastname, age) " +
                 "VALUES (?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -74,9 +74,9 @@ public class UserDaoJDBCImpl implements UserDao {
             while (results.next()) {
                 User users = new User();
                 users.setId(results.getLong("id"));
-                users.setName(results.getString("names"));
-                users.setLastName(results.getString("lastnames"));
-                users.setAge(results.getByte("ages"));
+                users.setName(results.getString("name"));
+                users.setLastName(results.getString("lastname"));
+                users.setAge(results.getByte("age"));
                 list.add(users);
             }
             return list;
