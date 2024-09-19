@@ -20,8 +20,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 "names VARCHAR(25), lastnames VARCHAR(25), " +
                 "ages TINYINT)";
 
-        try (Statement statement = Util.getConnect().createStatement()) {
-            statement.executeUpdate(sql);
+        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+            statement.executeUpdate();
         } catch (SQLException ex){
             System.out.println("Не удалось создать таблицу - Message - " +  ex.getMessage());
         }
@@ -31,8 +31,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         String sql = "DROP TABLE IF EXISTS USERS";
 
-        try (Statement statement = Util.getConnect().createStatement()) {
-            statement.executeUpdate(sql);
+        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+            statement.executeUpdate();
         } catch (SQLException ex){
             System.out.println("Не удалось удалить таблицу - Message - " +  ex.getMessage());
         }
@@ -57,8 +57,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String sql = "DELETE FROM USERS WHERE Id = " + id;
 
-        try (Statement statement = Util.getConnect().createStatement()) {
-            statement.executeUpdate(sql);
+        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+            statement.executeUpdate();
         } catch (SQLException ex){
             System.out.println("Не удалось удалить из таблицы - Message - " +  ex.getMessage());
         }
@@ -69,15 +69,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         ArrayList<User> list = new ArrayList<>();
 
-        try (Statement statement = Util.getConnect().createStatement()) {
-            ResultSet results = statement.executeQuery("SELECT * FROM USERS");
+        try (PreparedStatement statement = Util.getConnect().prepareStatement("SELECT * FROM USERS")) {
+            ResultSet results = statement.executeQuery();
 
             while (results.next()) {
                 User users = new User();
-                users.setId(results.getLong(1));
-                users.setName(results.getString(2));
-                users.setLastName(results.getString(3));
-                users.setAge(results.getByte(4));
+                users.setId(results.getLong("id"));
+                users.setName(results.getString("names"));
+                users.setLastName(results.getString("lastnames"));
+                users.setAge(results.getByte("ages"));
                 list.add(users);
             }
             return list;
