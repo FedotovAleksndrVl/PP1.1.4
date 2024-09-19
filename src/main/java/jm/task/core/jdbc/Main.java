@@ -27,7 +27,9 @@ public class Main {
             System.out.printf("User с именем — %s добавлен в базу данны \n", el.getName());
         }
 
-        System.out.println(userService.getAllUsers());
+        for (User el: userService.getAllUsers()){
+            System.out.println(el);
+        }
 
         userService.cleanUsersTable();
 

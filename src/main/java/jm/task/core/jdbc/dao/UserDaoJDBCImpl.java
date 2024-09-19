@@ -7,6 +7,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
+    private final Connection connection = Util.getConnect();
 
     public UserDaoJDBCImpl() {
 
@@ -14,52 +15,52 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS USERS(" +
+        final String sql = "CREATE TABLE IF NOT EXISTS USERS(" +
                 "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                 "names VARCHAR(25), lastnames VARCHAR(25), " +
                 "ages TINYINT)";
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
         } catch (SQLException ex){
-            System.out.println("Не удалось создать таблицу - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        String sql = "DROP TABLE IF EXISTS USERS";
+        final String sql = "DROP TABLE IF EXISTS USERS";
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
         } catch (SQLException ex){
-            System.out.println("Не удалось удалить таблицу - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void saveUser(String name, String lastname, byte age) {
-        String sql = "INSERT INTO USERS(names, lastnames, ages) " +
+        final String sql = "INSERT INTO USERS(names, lastnames, ages) " +
                 "VALUES (?, ?, ?)";
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
             statement.setString(2, lastname);
             statement.setByte(3, age);
             statement.executeUpdate();
         } catch (SQLException ex){
-            System.out.println("Не удалось записать в таблицу - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        String sql = "DELETE FROM USERS WHERE Id = " + id;
+        final String sql = "DELETE FROM USERS WHERE Id = " + id;
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
         } catch (SQLException ex){
-            System.out.println("Не удалось удалить из таблицы - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -67,7 +68,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         ArrayList<User> list = new ArrayList<>();
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement("SELECT * FROM USERS")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM USERS")) {
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
@@ -80,19 +81,18 @@ public class UserDaoJDBCImpl implements UserDao {
             }
             return list;
         } catch (SQLException ex){
-            System.out.println("Ошибка при чтении из таблицы - Message - " +  ex.getMessage());
+            ex.printStackTrace();
         }
         return null;
     }
 
     @Override
     public void cleanUsersTable() {
-        String sql = "TRUNCATE TABLE USERS";
+        final String sql = "TRUNCATE TABLE USERS";
 
-        try (PreparedStatement statement = Util.getConnect().prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
         } catch (SQLException ex){
-            System.out.println("Не удалось очистить таблицу - Message - " +  ex.getMessage());
             ex.printStackTrace();
         }
     }
