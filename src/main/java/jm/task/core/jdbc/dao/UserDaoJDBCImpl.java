@@ -7,7 +7,6 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    //public static Connection connect = Util.getConnect();
 
     public UserDaoJDBCImpl() {
 
@@ -66,7 +65,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-
         ArrayList<User> list = new ArrayList<>();
 
         try (PreparedStatement statement = Util.getConnect().prepareStatement("SELECT * FROM USERS")) {

@@ -1,10 +1,11 @@
 package jm.task.core.jdbc.util;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 
 public final class Util {
 
-    public static Connection getConnect () {
+    public static @Nullable Connection getConnect () {
         try {
             return DriverManager.getConnection("jdbc:mysql://localhost:3306/DB", "admin", "admin");
         } catch (SQLException e) {
@@ -13,7 +14,7 @@ public final class Util {
         return null;
     }
 
-    public static Connection getConnect (String url, String username, String password) {
+    public static @Nullable Connection getConnect (String url, String username, String password) {
         final String URL = url;
         final String USERNAME = username;
         final String PASSWORDS = password;
