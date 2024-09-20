@@ -1,10 +1,7 @@
 package jm.task.core.jdbc.util;
 import java.sql.*;
-
-
 import java.util.Properties;
 import java.util.logging.Level;
-
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -22,7 +19,6 @@ public class Util {
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
-
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
 
         if (sessionFactory == null) {

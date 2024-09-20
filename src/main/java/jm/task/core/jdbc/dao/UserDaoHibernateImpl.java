@@ -1,19 +1,11 @@
 package jm.task.core.jdbc.dao;
-
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.*;
-//import org.hibernate.SessionFactory;
-//import org.hibernate.Transaction;
-
-import java.sql.Connection;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-
-    //private final Connection connection = Util.getConnect();
     private final SessionFactory sessionFactory = Util.getSessionFactory();
-    //Session sessio = sessionFactory.cl;
 
     public UserDaoHibernateImpl() {
 
@@ -21,7 +13,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-
         final String sql = "CREATE TABLE IF NOT EXISTS users " +
                 "(id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
@@ -32,14 +23,12 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (Exception e) {
-            System.out.println("Вот в метоже createUsersTable возникла ошибка!!!");
             e.printStackTrace();
         }
     }
 
     @Override
     public void dropUsersTable() {
-
         final String sql = "DROP TABLE IF EXISTS users";
 
         try (Session session = sessionFactory.openSession()) {
@@ -47,7 +36,6 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (Exception e) {
-            System.out.println("Вот в метоже dropUsersTable возникла ошибка!!!");
             e.printStackTrace();
         }
     }
@@ -61,20 +49,19 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(user);
             tx.commit();
         } catch (Exception e) {
-            System.out.println("Вот в метоже saveUser возникла ошибка!!!");
             e.printStackTrace();
         }
     }
 
     @Override
     public void removeUserById(long id) {
+
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             User user = session.load(User.class, id);
             session.delete(user);
             session.flush();
         } catch (Exception e) {
-            System.out.println("Вот в метоже removeUserById возникла ошибка!!!");
             e.printStackTrace();
         }
     }
@@ -82,11 +69,11 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List<User> users;
+
         try (Session session = sessionFactory.openSession()) {
             users = session.createQuery("From User").list();
             return users;
         } catch (Exception e) {
-            System.out.println("Вот в метоже getAllUsers возникла ошибка!!!");
             e.printStackTrace();
         }
         return null;
@@ -101,7 +88,6 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createQuery(sql).executeUpdate();
             session.flush();
         } catch (Exception e) {
-            System.out.println("Вот в метоже cleanUsersTable возникла ошибка!!!");
             e.printStackTrace();
         }
     }
