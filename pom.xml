@@ -29,6 +29,12 @@
              <version>4.13.2</version>
              <scope>test</scope>
          </dependency>
+        <!-- https://mvnrepository.com/artifact/com.mchange/c3p0
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>3.0.0+</version>
+        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -41,6 +47,12 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.4.27.Final</version>
+        </dependency>-->
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -59,5 +71,4 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
-
 </project>
