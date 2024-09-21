@@ -4,6 +4,9 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.*;
 import java.util.List;
 
+import static org.hibernate.resource.transaction.spi.TransactionStatus.*;
+
+
 public class UserDaoHibernateImpl implements UserDao {
     private final SessionFactory sessionFactory = Util.getSessionFactory();
 
@@ -31,11 +34,15 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         final String sql = "DROP TABLE IF EXISTS users";
 
+        Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
     }
@@ -44,11 +51,15 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         final User user = new User(name, lastName, age);
 
+        Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(user);
             tx.commit();
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
     }
@@ -56,12 +67,17 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
 
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
-            session.beginTransaction();
+            tx = session.beginTransaction();
             User user = session.load(User.class, id);
             session.delete(user);
             session.flush();
+            tx.commit();
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
     }
@@ -70,10 +86,16 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users;
 
+        Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
             users = session.createQuery("From User").list();
+            tx.commit();
             return users;
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
         return null;
@@ -83,11 +105,16 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
         final String sql = "DELETE FROM User";
 
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.createQuery(sql).executeUpdate();
             session.flush();
+            tx.commit();
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
     }
