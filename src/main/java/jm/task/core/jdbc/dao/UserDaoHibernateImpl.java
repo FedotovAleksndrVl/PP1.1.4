@@ -21,11 +21,15 @@ public class UserDaoHibernateImpl implements UserDao {
                 "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
                 "age TINYINT NOT NULL)";
 
+        Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (Exception e) {
+            if (tx.getStatus() == ACTIVE || tx.getStatus() == MARKED_ROLLBACK) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
     }
